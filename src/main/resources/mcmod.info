@@ -1,0 +1,16 @@
+[
+{
+  "modid": "forcekill",
+  "name": "ForceKill",
+  "description": "Forces you to kill a player in Hypixel SkyWars or BedWars every x seconds; your game will crash if you don't.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["LifeKnight"],
+  "credits": "some person in sk1er's stream",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
