@@ -46,12 +46,11 @@ public class Mod {
 					this.setText(RED + killTimer.getFormattedTime());
 				}
 			}
-			if (this.isVisible()) {
+			if (this.isVisible() && onHypixel) {
 				Minecraft.getMinecraft().fontRendererObj.drawString(this.getText(), Utils.getGameWidth() - Minecraft.getMinecraft().fontRendererObj.getStringWidth(this.getText()) - 10,
 						5,
 						0xffffffff, this.isDropShadow());
 			}
-
 		}
 	};
 	public static final ArrayList<LifeKnightVariable> variables = new ArrayList<>();
