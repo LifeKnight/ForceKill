@@ -34,6 +34,17 @@ public class Mod {
 	public static final EnumChatFormatting modColor = RED;
 	public static final ExecutorService THREAD_POOL = Executors.newCachedThreadPool(new LifeKnightThreadFactory());
 	public static boolean onHypixel = false, openGui = false;
+	public static final ArrayList<LifeKnightVariable> variables = new ArrayList<>();
+	public static final LifeKnightBoolean runMod = new LifeKnightBoolean("Mod", "Main", false) {
+		@Override
+		public void onSetValue() {
+			timerDisplay.setVisibility(this.getValue());
+		}
+	};
+	public static final LifeKnightInteger timeToKill = new LifeKnightInteger("TimeToKill", "Settings", 60, 10, 300);
+	private static com.lifeknight.forcekill.mod.Timer killTimer = new com.lifeknight.forcekill.mod.Timer();
+	public static GuiScreen guiToOpen;
+	public static final Config config = new Config();
 	public static HudText timerDisplay = new HudText(0, 0, YELLOW + "PAUSED") {
 		@Override
 		public void render() {
@@ -53,17 +64,6 @@ public class Mod {
 			}
 		}
 	};
-	public static final ArrayList<LifeKnightVariable> variables = new ArrayList<>();
-	public static final LifeKnightBoolean runMod = new LifeKnightBoolean("Mod", "Main", false) {
-		@Override
-		public void onSetValue() {
-			timerDisplay.setVisibility(this.getValue());
-		}
-	};
-	public static final LifeKnightInteger timeToKill = new LifeKnightInteger("TimeToKill", "Settings", 60, 10, 300);
-	private static com.lifeknight.forcekill.mod.Timer killTimer = new com.lifeknight.forcekill.mod.Timer();
-	public static GuiScreen guiToOpen;
-	public static final Config config = new Config();
 
 	@EventHandler
 	void init(FMLInitializationEvent initEvent) {
@@ -83,9 +83,7 @@ public class Mod {
                 }
                 try {
 					onHypixel = Minecraft.getMinecraft().getCurrentServerData().serverIP.toLowerCase().contains("hypixel.net");
-				} catch (Exception ignored) {
-
-				}
+				} catch (Exception ignored) {}
             }
         }, 2000L);
     }
@@ -129,7 +127,7 @@ public class Mod {
 	}
 
 	@SubscribeEvent
-	void onTick(TickEvent.ClientTickEvent event) {
+	public void onTick(TickEvent.ClientTickEvent event) {
 		if (openGui) {
 			Minecraft.getMinecraft().displayGuiScreen(guiToOpen);
 			openGui = false;
@@ -141,7 +139,7 @@ public class Mod {
 	}
 
 	@SubscribeEvent
-	void onRenderTick(TickEvent.RenderTickEvent event) {
+	public void onRenderTick(TickEvent.RenderTickEvent event) {
 		if (Minecraft.getMinecraft().inGameHasFocus) {
 			doRender();
 		}

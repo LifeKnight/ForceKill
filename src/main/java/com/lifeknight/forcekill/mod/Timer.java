@@ -36,14 +36,14 @@ public class Timer {
                    break;
                }
                    try {
-                       Thread.sleep(10);
+                       Thread.sleep(5);
                    } catch (Exception e) {
                        e.printStackTrace();
                    }
 
-                   milliseconds -= 10;
+                   milliseconds -= 5;
 
-                   if (milliseconds == -10) {
+                   if (milliseconds == -5) {
                        milliseconds = 990;
                        seconds--;
                    }
@@ -115,7 +115,6 @@ public class Timer {
     }
 
     public String getFormattedTime() {
-
         return appendTime(minutes) + ":" +
                 appendTime(seconds) + "." +
                 formatMilliseconds();
