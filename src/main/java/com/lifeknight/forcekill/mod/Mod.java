@@ -35,40 +35,38 @@ public class Mod {
 	public static final ExecutorService THREAD_POOL = Executors.newCachedThreadPool(new LifeKnightThreadFactory());
 	public static boolean onHypixel = false, openGui = false;
 	public static final ArrayList<LifeKnightVariable> variables = new ArrayList<>();
-	public static final LifeKnightBoolean runMod = new LifeKnightBoolean("Mod", "Main", false) {
-		@Override
-		public void onSetValue() {
-			timerDisplay.setVisibility(this.getValue());
-		}
-	};
+	public static final LifeKnightBoolean runMod = new LifeKnightBoolean("Mod", "Main", false);
 	public static final LifeKnightInteger timeToKill = new LifeKnightInteger("TimeToKill", "Settings", 60, 10, 300);
 	private static com.lifeknight.forcekill.mod.Timer killTimer = new com.lifeknight.forcekill.mod.Timer();
 	public static GuiScreen guiToOpen;
-	public static final Config config = new Config();
-	public static HudText timerDisplay = new HudText(0, 0, YELLOW + "PAUSED") {
-		@Override
-		public void render() {
-			if (!this.getText().equals(YELLOW + "PAUSED") && killTimer != null) {
-				if (killTimer.getMinutes() > 0) {
-					this.setText(GREEN + killTimer.getFormattedTime());
-				} else if (killTimer.getSeconds() >= 30) {
-					this.setText(YELLOW + killTimer.getFormattedTime());
-				} else {
-					this.setText(RED + killTimer.getFormattedTime());
-				}
-			}
-			if (this.isVisible() && onHypixel) {
-				Minecraft.getMinecraft().fontRendererObj.drawString(this.getText(), Utils.getGameWidth() - Minecraft.getMinecraft().fontRendererObj.getStringWidth(this.getText()) - 10,
-						5,
-						0xffffffff, this.isDropShadow());
-			}
-		}
-	};
+	public static Config config;
+	public static HudText timerDisplay;
 
 	@EventHandler
 	void init(FMLInitializationEvent initEvent) {
 		MinecraftForge.EVENT_BUS.register(this);
 		ClientCommandHandler.instance.registerCommand(new ModCommand());
+		config = new Config();
+
+		timerDisplay = new HudText(0, 0, YELLOW + "PAUSED") {
+			@Override
+			public void render() {
+				if (!this.getText().equals(YELLOW + "PAUSED") && killTimer != null) {
+					if (killTimer.getMinutes() > 0) {
+						this.setText(GREEN + killTimer.getFormattedTime());
+					} else if (killTimer.getSeconds() >= 30) {
+						this.setText(YELLOW + killTimer.getFormattedTime());
+					} else {
+						this.setText(RED + killTimer.getFormattedTime());
+					}
+				}
+				if (runMod.getValue() && onHypixel) {
+					Minecraft.getMinecraft().fontRendererObj.drawString(this.getText(), Utils.getGameWidth() - Minecraft.getMinecraft().fontRendererObj.getStringWidth(this.getText()) - 10,
+							5,
+							0xffffffff, this.isDropShadow());
+				}
+			}
+		};
 	}
 	
 	@SubscribeEvent
@@ -119,7 +117,7 @@ public class Mod {
 
 	@SubscribeEvent
 	public void onWorldSwitch(WorldEvent.Load event) {
-		if (runMod != null && runMod.getValue() && killTimer.isRunning() && onHypixel) {
+		if (runMod.getValue() && killTimer.isRunning() && onHypixel) {
 			killTimer.toggle();
 			Utils.addChatMessage(YELLOW + "KillTimer paused.");
 			timerDisplay.setText(YELLOW + "PAUSED");
@@ -133,7 +131,7 @@ public class Mod {
 			openGui = false;
 		}
 
-		if (runMod != null && runMod.getValue() && killTimer.hasEnded()) {
+		if (runMod.getValue() && killTimer.hasEnded()) {
 			FMLCommonHandler.instance().exitJava(0, true);
 		}
 	}

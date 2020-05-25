@@ -17,7 +17,6 @@ import static com.lifeknight.forcekill.mod.Mod.modID;
 import static com.lifeknight.forcekill.mod.Mod.variables;
 
 public class Config {
-	public boolean active = false;
 	private JsonObject configAsJson = new JsonObject();
 
 	public Config() {
@@ -29,7 +28,6 @@ public class Config {
 
 	public void updateVariablesFromConfig() {
 		getConfigContent();
-		active = true;
 		for (LifeKnightVariable variable: variables) {
 			try {
 				if (variable instanceof LifeKnightBoolean) {
@@ -50,11 +48,9 @@ public class Config {
 				Utils.queueChatMessageForConnection(EnumChatFormatting.RED + "An error occurred while extracting the value of \"" + variable.getLowerCaseName() + "\" from the config; the value will be interpreted as " + variable.getValue() + ".");
 			}
 		}
-		active = false;
 	}
 
 	public void updateConfigFromVariables() {
-		active = true;
 		JsonObject configAsJsonReplacement = new JsonObject();
 
 		ArrayList<String> groups = new ArrayList<>();
@@ -90,7 +86,6 @@ public class Config {
 		configAsJson = configAsJsonReplacement;
 
 		writeToConfig(configAsJson.toString());
-		active = false;
 	}
 
 	public boolean configExists() {

@@ -36,10 +36,8 @@ public class LifeKnightBoolean extends LifeKnightVariable {
 
     public void toggle() {
         value = !value;
-        if (!config.active) {
-            config.updateConfigFromVariables();
-            onSetValue();
-        }
+        config.updateConfigFromVariables();
+        onSetValue();
     }
 
     public void setValue(boolean newValue) {
